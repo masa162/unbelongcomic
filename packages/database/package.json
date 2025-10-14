@@ -1,0 +1,14 @@
+{
+  "name": "@unbelong/database",
+  "version": "1.0.0",
+  "description": "Database schema and migrations for unbelong",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "migrate:local": "wrangler d1 execute unbelong-db --local --file=./schema.sql",
+    "migrate:remote": "wrangler d1 execute unbelong-db --remote --file=./schema.sql"
+  },
+  "keywords": [],
+  "author": "belong",
+  "license": "UNLICENSED"
+}

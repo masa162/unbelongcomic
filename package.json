@@ -1,0 +1,32 @@
+{
+  "name": "unbelong",
+  "version": "1.0.0",
+  "description": "unbelong - マンガ・イラスト公開プラットフォーム",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --workspace=@unbelong/admin",
+    "dev:comic": "npm run dev --workspace=@unbelong/comic",
+    "dev:illust": "npm run dev --workspace=@unbelong/illust",
+    "dev:api": "npm run dev --workspace=@unbelong/api",
+    "build:admin": "npm run build --workspace=@unbelong/admin",
+    "build:comic": "npm run build --workspace=@unbelong/comic",
+    "build:illust": "npm run build --workspace=@unbelong/illust",
+    "build:api": "npm run build --workspace=@unbelong/api",
+    "deploy:admin": "npm run deploy --workspace=@unbelong/admin",
+    "deploy:comic": "npm run deploy --workspace=@unbelong/comic",
+    "deploy:illust": "npm run deploy --workspace=@unbelong/illust",
+    "deploy:api": "npm run deploy --workspace=@unbelong/api"
+  },
+  "keywords": [
+    "manga",
+    "comic",
+    "illustration",
+    "cloudflare"
+  ],
+  "author": "belong",
+  "license": "UNLICENSED"
+}
