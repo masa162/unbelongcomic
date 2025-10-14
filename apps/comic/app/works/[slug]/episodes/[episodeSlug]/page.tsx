@@ -9,6 +9,12 @@ import Footer from '@/components/Footer';
 import EpisodeViewer from '@/components/EpisodeViewer';
 
 export const revalidate = 60;
+export const dynamicParams = true;
+
+// 静的エクスポート用：ビルド時に空の配列を返す（動的生成）
+export async function generateStaticParams() {
+  return [];
+}
 
 async function getWork(slug: string): Promise<Work | null> {
   try {
