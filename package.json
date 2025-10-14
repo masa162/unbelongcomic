@@ -21,7 +21,7 @@
     "deploy:comic": "npm run deploy --workspace=@unbelong/comic",
     "deploy:illust": "npm run deploy --workspace=@unbelong/illust",
     "deploy:api": "npm run deploy --workspace=@unbelong/api",
-    "pages:build:comic": "npm install && npm run build:shared && cd apps/comic && npm install && npm run build"
+    "pages:build:comic": "npm install && npm run build:shared && cd apps/comic && npm install && npm run build && npm run pages:build"
   },
   "keywords": [
     "manga",
