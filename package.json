@@ -12,14 +12,16 @@
     "dev:comic": "npm run dev --workspace=@unbelong/comic",
     "dev:illust": "npm run dev --workspace=@unbelong/illust",
     "dev:api": "npm run dev --workspace=@unbelong/api",
-    "build:admin": "npm run build --workspace=@unbelong/admin",
-    "build:comic": "npm run build --workspace=@unbelong/comic",
-    "build:illust": "npm run build --workspace=@unbelong/illust",
+    "build:shared": "npm run build --workspace=@unbelong/shared",
+    "build:admin": "npm run build:shared && npm run build --workspace=@unbelong/admin",
+    "build:comic": "npm run build:shared && npm run build --workspace=@unbelong/comic",
+    "build:illust": "npm run build:shared && npm run build --workspace=@unbelong/illust",
     "build:api": "npm run build --workspace=@unbelong/api",
     "deploy:admin": "npm run deploy --workspace=@unbelong/admin",
     "deploy:comic": "npm run deploy --workspace=@unbelong/comic",
     "deploy:illust": "npm run deploy --workspace=@unbelong/illust",
-    "deploy:api": "npm run deploy --workspace=@unbelong/api"
+    "deploy:api": "npm run deploy --workspace=@unbelong/api",
+    "pages:build:comic": "npm install && npm run build:shared && cd apps/comic && npm install && npm run build"
   },
   "keywords": [
     "manga",
