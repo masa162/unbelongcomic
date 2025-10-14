@@ -30,5 +30,9 @@
     "cloudflare"
   ],
   "author": "belong",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
