@@ -9,19 +9,15 @@
   ],
   "scripts": {
     "dev:admin": "npm run dev --workspace=@unbelong/admin",
-    "dev:comic": "npm run dev --workspace=@unbelong/comic",
     "dev:illust": "npm run dev --workspace=@unbelong/illust",
     "dev:api": "npm run dev --workspace=@unbelong/api",
     "build:shared": "npm run build --workspace=@unbelong/shared",
     "build:admin": "npm run build:shared && npm run build --workspace=@unbelong/admin",
-    "build:comic": "npm run build:shared && npm run build --workspace=@unbelong/comic",
     "build:illust": "npm run build:shared && npm run build --workspace=@unbelong/illust",
     "build:api": "npm run build --workspace=@unbelong/api",
     "deploy:admin": "npm run deploy --workspace=@unbelong/admin",
-    "deploy:comic": "npm run deploy --workspace=@unbelong/comic",
     "deploy:illust": "npm run deploy --workspace=@unbelong/illust",
-    "deploy:api": "npm run deploy --workspace=@unbelong/api",
-    "pages:build:comic": "npm install && npm run build:comic"
+    "deploy:api": "npm run deploy --workspace=@unbelong/api"
   },
   "keywords": [
     "manga",
@@ -30,5 +26,24 @@
     "cloudflare"
   ],
   "author": "belong",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "next": "^14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3"
+  }
 }
