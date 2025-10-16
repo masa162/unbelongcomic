@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { illustrationsApi } from '@/lib/api';
 import type { Illustration } from '@unbelong/shared';
 import IllustrationForm from '@/components/IllustrationForm';
+
+export const runtime = 'edge';
 
 export default function EditIllustrationPage() {
   const params = useParams();

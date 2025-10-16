@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { worksApi } from '@/lib/api';
 import type { Work } from '@unbelong/shared';
 import WorkForm from '@/components/WorkForm';
+
+export const runtime = 'edge';
 
 export default function EditWorkPage() {
   const params = useParams();

@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { episodesApi } from '@/lib/api';
 import type { Episode } from '@unbelong/shared';
 import EpisodeForm from '@/components/EpisodeForm';
+
+export const runtime = 'edge';
 
 export default function EditEpisodePage() {
   const params = useParams();
