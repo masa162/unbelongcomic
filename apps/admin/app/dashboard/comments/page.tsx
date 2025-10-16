@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { commentsApi } from '@/lib/api';
-import type { Comment } from '@unbelong/shared';
+import type { Comment, CommentStatus } from '@unbelong/shared';
 import { formatDateTime } from '@unbelong/shared';
 
 export default function CommentsPage() {
@@ -29,7 +29,7 @@ export default function CommentsPage() {
     }
   };
 
-  const handleUpdateStatus = async (id: string, status: string) => {
+  const handleUpdateStatus = async (id: string, status: CommentStatus) => {
     try {
       await commentsApi.update(id, { status });
       alert('コメントのステータスを更新しました');

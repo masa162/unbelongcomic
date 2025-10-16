@@ -70,7 +70,7 @@ export default function IllustrationForm({
         image_id: formData.image_id,
         og_image_id: formData.og_image_id || null,
         status: formData.status,
-        tags: tagsArray,
+        tags: JSON.stringify(tagsArray),
       };
 
       if (isEdit && illustration) {
