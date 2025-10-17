@@ -40,13 +40,27 @@ export default function ImagesPage() {
 
     setUploading(true);
     try {
-      // Cloudflare Imagesへのアップロードは、別途APIルートを作成して実装
-      // ここでは仮のデータで登録
-      const imageId = `img_${Date.now()}`;
+      // 1. Cloudflare Imagesにアップロード
+      const formData = new FormData();
+      formData.append('file', selectedFile);
 
+      const uploadResponse = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const uploadResult = await uploadResponse.json();
+
+      if (!uploadResult.success) {
+        throw new Error(uploadResult.error || '画像のアップロードに失敗しました');
+      }
+
+      const imageId = uploadResult.data.id;
+
+      // 2. DBに画像メタデータを保存
       await imagesApi.create({
         id: imageId,
-        filename: selectedFile.name,
+        filename: uploadResult.data.filename || selectedFile.name,
         alt_text: '',
         format: selectedFile.type,
         size: selectedFile.size,
@@ -54,10 +68,15 @@ export default function ImagesPage() {
 
       alert('画像をアップロードしました');
       setSelectedFile(null);
+
+      // ファイル入力をリセット
+      const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+
       loadImages();
     } catch (error) {
       console.error('画像のアップロードに失敗しました:', error);
-      alert('画像のアップロードに失敗しました');
+      alert(`画像のアップロードに失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`);
     } finally {
       setUploading(false);
     }
