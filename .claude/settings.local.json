@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(npm --version)",
+      "Bash(npm install:*)",
+      "Bash(wrangler:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: プロジェクト基本構造とデータベーススキーマの初期化\n\n- モノレポ構成の作成（apps/, packages/）\n- データベーススキーマの設計と実装\n- 共通型定義パッケージの作成\n- Cloudflare D1用のマイグレーションファイル作成\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(npm init:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Cloudflare Workers APIの実装\n\n- Honoフレームワークを使用したRESTful API\n- 作品、エピソード、イラスト、コメント、画像、作者のCRUD操作\n- D1データベースとの連携\n- CORS設定とエラーハンドリング\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npx create-next-app:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: 管理画面Next.jsプロジェクトの初期化\n\n- Next.js 14 App Router構成\n- Tailwind CSS設定\n- APIクライアントライブラリ\n- 基本的なディレクトリ構造\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: 管理画面の主要機能実装\n\n- Basic認証ミドルウェア\n- ダッシュボード（統計情報表示）\n- サイドバーナビゲーション\n- 画像管理機能（一覧・削除・URLコピー）\n- 作品管理機能（一覧・フィルター）\n- コメント管理機能（承認・却下・削除）\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: 作品・エピソード編集機能の追加\n\n- 作品の新規作成・編集フォーム\n- エピソード管理ページ（一覧・フィルター）\n- 再利用可能なWorkFormコンポーネント\n- 動的ルーティングによる編集ページ\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(npm run build:*)",
+      "Bash(cat:*)",
+      "Bash(npm run build:shared:*)",
+      "Bash(NODE_ENV=production NEXT_PUBLIC_API_URL=https://api.unbelong.xyz npm run build)",
+      "Bash(npx wrangler d1 list:*)",
+      "Bash(npx wrangler d1 execute:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(curl:*)",
+      "Bash(NODE_ENV=production NEXT_PUBLIC_API_URL=https://unbelong-api.belong2jazz.workers.dev npm run build)",
+      "Bash(NEXT_PUBLIC_API_URL=https://unbelong-api.belong2jazz.workers.dev npm run build)",
+      "Read(//mnt/d/**)",
+      "Bash(rm:*)",
+      "Bash(npm run build:admin:*)",
+      "Bash(python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
