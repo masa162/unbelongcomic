@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { illustrationsApi } from '@/lib/api';
-import type { Illustration } from '@unbelong/shared';
+import { illustrationsApi, worksApi } from '@/lib/api';
+import type { Illustration, Work } from '@unbelong/shared';
 import { generateSlug } from '@unbelong/shared';
 
 interface IllustrationFormProps {
@@ -17,7 +17,9 @@ export default function IllustrationForm({
 }: IllustrationFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [works, setWorks] = useState<Work[]>([]);
   const [formData, setFormData] = useState({
+    work_id: illustration?.work_id || '',
     title: illustration?.title || '',
     slug: illustration?.slug || '',
     description: illustration?.description || '',
@@ -26,6 +28,21 @@ export default function IllustrationForm({
     status: illustration?.status || 'draft',
     tags: illustration?.tags ? JSON.stringify(illustration.tags, null, 2) : '[]',
   });
+
+  useEffect(() => {
+    loadWorks();
+  }, []);
+
+  const loadWorks = async () => {
+    try {
+      const response = await worksApi.list('illustration', undefined);
+      if (response.data.success && response.data.data) {
+        setWorks(response.data.data);
+      }
+    } catch (error) {
+      console.error('作品の取得に失敗しました:', error);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -64,6 +81,7 @@ export default function IllustrationForm({
       }
 
       const submitData = {
+        work_id: formData.work_id,
         title: formData.title,
         slug: formData.slug,
         description: formData.description || null,
@@ -91,6 +109,30 @@ export default function IllustrationForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* 作品選択 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          作品 <span className="text-red-500">*</span>
+        </label>
+        <select
+          name="work_id"
+          value={formData.work_id}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+        >
+          <option value="">作品を選択してください</option>
+          {works.map((work) => (
+            <option key={work.id} value={work.id}>
+              {work.title}
+            </option>
+          ))}
+        </select>
+        <p className="text-sm text-gray-500 mt-1">
+          このイラストが属する作品を選択してください。作品が存在しない場合は、先に作品管理から作成してください。
+        </p>
+      </div>
+
       {/* タイトル */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
