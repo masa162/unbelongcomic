@@ -37,10 +37,13 @@ export default function ImageSelectorField({
               className="w-full h-full object-cover"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">画像読み込みエラー</div>';
+                if (!target.dataset.errorHandled) {
+                  target.dataset.errorHandled = 'true';
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">画像読み込みエラー</div>';
+                  }
                 }
               }}
             />

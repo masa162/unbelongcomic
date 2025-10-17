@@ -100,9 +100,11 @@ export default function IllustrationForm({
         alert('イラストを作成しました');
       }
       router.push('/dashboard/illustrations');
-    } catch (error) {
+    } catch (error: any) {
       console.error('イラストの保存に失敗しました:', error);
-      alert('イラストの保存に失敗しました');
+      const errorMessage = error?.response?.data?.error || error?.message || 'イラストの保存に失敗しました';
+      const detailMessage = error?.response?.data?.message ? `\n詳細: ${error.response.data.message}` : '';
+      alert(`イラストの保存に失敗しました\n${errorMessage}${detailMessage}`);
     } finally {
       setLoading(false);
     }

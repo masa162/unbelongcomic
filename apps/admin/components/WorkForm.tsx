@@ -49,17 +49,26 @@ export default function WorkForm({ work, isEdit = false }: WorkFormProps) {
     setLoading(true);
 
     try {
+      // 空の画像IDをnullに変換
+      const submitData = {
+        ...formData,
+        thumbnail_image_id: formData.thumbnail_image_id || null,
+        og_image_id: formData.og_image_id || null,
+      };
+
       if (isEdit && work) {
-        await worksApi.update(work.id, formData);
+        await worksApi.update(work.id, submitData);
         alert('作品を更新しました');
       } else {
-        await worksApi.create(formData);
+        await worksApi.create(submitData);
         alert('作品を作成しました');
       }
       router.push('/dashboard/works');
-    } catch (error) {
+    } catch (error: any) {
       console.error('作品の保存に失敗しました:', error);
-      alert('作品の保存に失敗しました');
+      const errorMessage = error?.response?.data?.error || error?.message || '作品の保存に失敗しました';
+      const detailMessage = error?.response?.data?.message ? `\n詳細: ${error.response.data.message}` : '';
+      alert(`作品の保存に失敗しました\n${errorMessage}${detailMessage}`);
     } finally {
       setLoading(false);
     }

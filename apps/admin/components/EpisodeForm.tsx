@@ -66,17 +66,26 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
     setLoading(true);
 
     try {
+      // 空の画像IDをnullに変換
+      const submitData = {
+        ...formData,
+        thumbnail_image_id: formData.thumbnail_image_id || null,
+        og_image_id: formData.og_image_id || null,
+      };
+
       if (isEdit && episode) {
-        await episodesApi.update(episode.id, formData);
+        await episodesApi.update(episode.id, submitData);
         alert('エピソードを更新しました');
       } else {
-        await episodesApi.create(formData);
+        await episodesApi.create(submitData);
         alert('エピソードを作成しました');
       }
       router.push('/dashboard/episodes');
-    } catch (error) {
+    } catch (error: any) {
       console.error('エピソードの保存に失敗しました:', error);
-      alert('エピソードの保存に失敗しました');
+      const errorMessage = error?.response?.data?.error || error?.message || 'エピソードの保存に失敗しました';
+      const detailMessage = error?.response?.data?.message ? `\n詳細: ${error.response.data.message}` : '';
+      alert(`エピソードの保存に失敗しました\n${errorMessage}${detailMessage}`);
     } finally {
       setLoading(false);
     }
