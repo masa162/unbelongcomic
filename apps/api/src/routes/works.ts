@@ -37,6 +37,81 @@ works.get('/', async (c) => {
   }
 });
 
+// 作品のエピソードをslugで取得（ネストされたルート）
+// NOTE: このルートは /:identifier より前に配置する必要がある
+works.get('/slug/:workSlug/episodes/:episodeSlug', async (c) => {
+  const workSlug = c.req.param('workSlug');
+  const episodeSlug = c.req.param('episodeSlug');
+
+  try {
+    // published_episodesビューから取得（work情報も含まれる）
+    const { results } = await c.env.DB.prepare(
+      `SELECT * FROM published_episodes
+       WHERE work_slug = ? AND slug = ?`
+    )
+      .bind(workSlug, episodeSlug)
+      .all();
+
+    if (results.length === 0) {
+      return c.json(
+        {
+          success: false,
+          error: 'エピソードが見つかりません',
+        },
+        404
+      );
+    }
+
+    return c.json({
+      success: true,
+      data: results[0],
+    });
+  } catch (error: any) {
+    return c.json(
+      {
+        success: false,
+        error: 'エピソードの取得に失敗しました',
+        message: error.message,
+      },
+      500
+    );
+  }
+});
+
+// スラッグで作品を取得
+works.get('/slug/:slug', async (c) => {
+  const slug = c.req.param('slug');
+
+  try {
+    const { results } = await c.env.DB.prepare('SELECT * FROM works WHERE slug = ?')
+      .bind(slug)
+      .all<Work>();
+
+    if (results.length === 0) {
+      return c.json(
+        {
+          success: false,
+          error: '作品が見つかりません',
+        },
+        404
+      );
+    }
+
+    return c.json({
+      success: true,
+      data: results[0],
+    });
+  } catch (error) {
+    return c.json(
+      {
+        success: false,
+        error: '作品の取得に失敗しました',
+      },
+      500
+    );
+  }
+});
+
 // 作品詳細取得（IDまたはslug）
 works.get('/:identifier', async (c) => {
   const identifier = c.req.param('identifier');
@@ -233,46 +308,6 @@ works.delete('/:id', async (c) => {
       {
         success: false,
         error: '作品の削除に失敗しました',
-      },
-      500
-    );
-  }
-});
-
-// 作品のエピソードをslugで取得（ネストされたルート）
-works.get('/slug/:workSlug/episodes/:episodeSlug', async (c) => {
-  const workSlug = c.req.param('workSlug');
-  const episodeSlug = c.req.param('episodeSlug');
-
-  try {
-    // published_episodesビューから取得（work情報も含まれる）
-    const { results } = await c.env.DB.prepare(
-      `SELECT * FROM published_episodes
-       WHERE work_slug = ? AND slug = ?`
-    )
-      .bind(workSlug, episodeSlug)
-      .all();
-
-    if (results.length === 0) {
-      return c.json(
-        {
-          success: false,
-          error: 'エピソードが見つかりません',
-        },
-        404
-      );
-    }
-
-    return c.json({
-      success: true,
-      data: results[0],
-    });
-  } catch (error: any) {
-    return c.json(
-      {
-        success: false,
-        error: 'エピソードの取得に失敗しました',
-        message: error.message,
       },
       500
     );
