@@ -7,20 +7,29 @@ const episodes = new Hono<{ Bindings: Bindings }>();
 // エピソード一覧取得
 episodes.get('/', async (c) => {
   const workId = c.req.query('work_id');
-  const status = c.req.query('status') || 'published';
+  const status = c.req.query('status');
 
   try {
     let query = `
       SELECT e.*, w.title as work_title, w.slug as work_slug
       FROM episodes e
       JOIN works w ON e.work_id = w.id
-      WHERE e.status = ?
     `;
-    const params: string[] = [status];
+    const params: string[] = [];
+    const conditions: string[] = [];
+
+    if (status) {
+      conditions.push('e.status = ?');
+      params.push(status);
+    }
 
     if (workId) {
-      query += ' AND e.work_id = ?';
+      conditions.push('e.work_id = ?');
       params.push(workId);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
     }
 
     query += ' ORDER BY e.episode_number ASC';

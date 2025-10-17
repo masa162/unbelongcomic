@@ -11,6 +11,7 @@ export default function EpisodesPage() {
   const [works, setWorks] = useState<Work[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWork, setSelectedWork] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
   useEffect(() => {
     loadWorks();
@@ -18,7 +19,7 @@ export default function EpisodesPage() {
 
   useEffect(() => {
     loadEpisodes();
-  }, [selectedWork]);
+  }, [selectedWork, selectedStatus]);
 
   const loadWorks = async () => {
     try {
@@ -34,7 +35,8 @@ export default function EpisodesPage() {
   const loadEpisodes = async () => {
     try {
       const workId = selectedWork === 'all' ? undefined : selectedWork;
-      const response = await episodesApi.list(workId, undefined);
+      const status = selectedStatus === 'all' ? undefined : selectedStatus;
+      const response = await episodesApi.list(workId, status);
       if (response.data.success && response.data.data) {
         setEpisodes(response.data.data);
       }
@@ -105,21 +107,38 @@ export default function EpisodesPage() {
         </Link>
       </div>
 
-      {/* 作品フィルター */}
+      {/* フィルター */}
       <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">作品で絞り込み</label>
-        <select
-          value={selectedWork}
-          onChange={(e) => setSelectedWork(e.target.value)}
-          className="w-full md:w-64 px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-        >
-          <option value="all">全ての作品</option>
-          {works.map((work) => (
-            <option key={work.id} value={work.id}>
-              {work.title}
-            </option>
-          ))}
-        </select>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">作品で絞り込み</label>
+            <select
+              value={selectedWork}
+              onChange={(e) => setSelectedWork(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="all">全ての作品</option>
+              {works.map((work) => (
+                <option key={work.id} value={work.id}>
+                  {work.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">ステータスで絞り込み</label>
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="all">全てのステータス</option>
+              <option value="draft">下書き</option>
+              <option value="published">公開中</option>
+              <option value="archived">アーカイブ</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* エピソード一覧 */}

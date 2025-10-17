@@ -8,21 +8,30 @@ const comments = new Hono<{ Bindings: Bindings }>();
 comments.get('/', async (c) => {
   const targetType = c.req.query('target_type');
   const targetId = c.req.query('target_id');
-  const status = c.req.query('status') || 'approved';
+  const status = c.req.query('status');
 
   try {
-    let query = 'SELECT * FROM comments WHERE status = ?';
-    const params: string[] = [status];
+    let query = 'SELECT * FROM comments';
+    const params: string[] = [];
+    const conditions: string[] = [];
 
-    if (targetType && targetId) {
-      query += ' AND target_type = ? AND target_id = ?';
-      params.push(targetType, targetId);
-    } else if (targetType) {
-      query += ' AND target_type = ?';
+    if (status) {
+      conditions.push('status = ?');
+      params.push(status);
+    }
+
+    if (targetType) {
+      conditions.push('target_type = ?');
       params.push(targetType);
-    } else if (targetId) {
-      query += ' AND target_id = ?';
+    }
+
+    if (targetId) {
+      conditions.push('target_id = ?');
       params.push(targetId);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
     }
 
     query += ' ORDER BY created_at DESC';

@@ -7,15 +7,25 @@ const works = new Hono<{ Bindings: Bindings }>();
 // 作品一覧取得
 works.get('/', async (c) => {
   const type = c.req.query('type'); // comic or illustration
-  const status = c.req.query('status') || 'published';
+  const status = c.req.query('status');
 
   try {
-    let query = 'SELECT * FROM works WHERE status = ?';
-    const params: string[] = [status];
+    let query = 'SELECT * FROM works';
+    const params: string[] = [];
+    const conditions: string[] = [];
+
+    if (status) {
+      conditions.push('status = ?');
+      params.push(status);
+    }
 
     if (type) {
-      query += ' AND type = ?';
+      conditions.push('type = ?');
       params.push(type);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
     }
 
     query += ' ORDER BY published_at DESC';

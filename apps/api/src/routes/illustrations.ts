@@ -6,16 +6,20 @@ const illustrations = new Hono<{ Bindings: Bindings }>();
 
 // イラスト一覧取得
 illustrations.get('/', async (c) => {
-  const status = c.req.query('status') || 'published';
+  const status = c.req.query('status');
 
   try {
-    const query = `
-      SELECT * FROM illustrations
-      WHERE status = ?
-      ORDER BY published_at DESC
-    `;
+    let query = 'SELECT * FROM illustrations';
+    const params: string[] = [];
 
-    const { results } = await c.env.DB.prepare(query).bind(status).all<Illustration>();
+    if (status) {
+      query += ' WHERE status = ?';
+      params.push(status);
+    }
+
+    query += ' ORDER BY published_at DESC';
+
+    const { results } = await c.env.DB.prepare(query).bind(...params).all<Illustration>();
 
     return c.json({
       success: true,
