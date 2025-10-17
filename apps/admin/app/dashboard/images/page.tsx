@@ -154,9 +154,16 @@ export default function ImagesPage() {
             <div key={image.id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
               <div className="aspect-square bg-gray-100 rounded-md mb-3 overflow-hidden">
                 <img
-                  src={getImageUrl(image.id, 'thumbnail')}
+                  src={`${getImageUrl(image.id, 'public')}?width=400`}
                   alt={image.alt_text || image.filename}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // フォールバック: パラメータなしのpublic URLを試す
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes('fallback')) {
+                      target.src = getImageUrl(image.id, 'public') + '?fallback=1';
+                    }
+                  }}
                 />
               </div>
               <p className="text-sm font-medium text-gray-900 truncate mb-2">
