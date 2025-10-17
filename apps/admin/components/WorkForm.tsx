@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { worksApi } from '@/lib/api';
 import type { Work } from '@unbelong/shared';
 import { generateSlug } from '@unbelong/shared';
+import ImageSelectorField from './ImageSelectorField';
 
 interface WorkFormProps {
   work?: Work;
@@ -132,36 +133,24 @@ export default function WorkForm({ work, isEdit = false }: WorkFormProps) {
       </div>
 
       {/* サムネイル画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          サムネイル画像ID
-        </label>
-        <input
-          type="text"
-          name="thumbnail_image_id"
-          value={formData.thumbnail_image_id}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-        <p className="text-sm text-gray-500 mt-1">
-          画像管理ページでアップロードした画像のIDを入力
-        </p>
-      </div>
+      <ImageSelectorField
+        label="サムネイル画像"
+        value={formData.thumbnail_image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, thumbnail_image_id: value }))
+        }
+        helperText="作品一覧などに表示されるサムネイル画像"
+      />
 
       {/* OG画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">OG画像ID</label>
-        <input
-          type="text"
-          name="og_image_id"
-          value={formData.og_image_id}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-        <p className="text-sm text-gray-500 mt-1">SNSシェア用の画像</p>
-      </div>
+      <ImageSelectorField
+        label="OG画像"
+        value={formData.og_image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, og_image_id: value }))
+        }
+        helperText="SNSシェア用の画像。未設定の場合はサムネイルが使用されます"
+      />
 
       {/* ステータス */}
       <div>

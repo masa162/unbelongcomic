@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { illustrationsApi, worksApi } from '@/lib/api';
 import type { Illustration, Work } from '@unbelong/shared';
 import { generateSlug } from '@unbelong/shared';
+import ImageSelectorField from './ImageSelectorField';
 
 interface IllustrationFormProps {
   illustration?: Illustration;
@@ -182,39 +183,25 @@ export default function IllustrationForm({
       </div>
 
       {/* メイン画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          画像ID <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          name="image_id"
-          value={formData.image_id}
-          onChange={handleChange}
-          required
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-        <p className="text-sm text-gray-500 mt-1">
-          画像管理ページからアップロードした画像のIDを入力してください。
-        </p>
-      </div>
+      <ImageSelectorField
+        label="メイン画像"
+        value={formData.image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, image_id: value }))
+        }
+        required
+        helperText="イラスト本体の画像"
+      />
 
       {/* OG画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">OG画像ID</label>
-        <input
-          type="text"
-          name="og_image_id"
-          value={formData.og_image_id}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-        <p className="text-sm text-gray-500 mt-1">
-          SNSシェア用の画像。指定しない場合はメイン画像が使用されます。
-        </p>
-      </div>
+      <ImageSelectorField
+        label="OG画像"
+        value={formData.og_image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, og_image_id: value }))
+        }
+        helperText="SNSシェア用の画像。指定しない場合はメイン画像が使用されます"
+      />
 
       {/* タグ（JSON配列） */}
       <div>

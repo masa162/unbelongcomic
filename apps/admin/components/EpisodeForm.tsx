@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { episodesApi, worksApi } from '@/lib/api';
 import type { Episode, Work } from '@unbelong/shared';
 import { generateSlug } from '@unbelong/shared';
+import ImageSelectorField from './ImageSelectorField';
 
 interface EpisodeFormProps {
   episode?: Episode;
@@ -190,32 +191,24 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
       </div>
 
       {/* サムネイル画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          サムネイル画像ID
-        </label>
-        <input
-          type="text"
-          name="thumbnail_image_id"
-          value={formData.thumbnail_image_id}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-      </div>
+      <ImageSelectorField
+        label="サムネイル画像"
+        value={formData.thumbnail_image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, thumbnail_image_id: value }))
+        }
+        helperText="エピソード一覧などに表示されるサムネイル画像"
+      />
 
       {/* OG画像ID */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">OG画像ID</label>
-        <input
-          type="text"
-          name="og_image_id"
-          value={formData.og_image_id}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-          placeholder="Cloudflare Images ID"
-        />
-      </div>
+      <ImageSelectorField
+        label="OG画像"
+        value={formData.og_image_id}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, og_image_id: value }))
+        }
+        helperText="SNSシェア用の画像。未設定の場合はサムネイルまたは作品画像が使用されます"
+      />
 
       {/* ステータス */}
       <div>
