@@ -245,10 +245,10 @@ works.get('/slug/:workSlug/episodes/:episodeSlug', async (c) => {
   const episodeSlug = c.req.param('episodeSlug');
 
   try {
-    // episodesビューから取得（work情報も含まれる）
+    // published_episodesビューから取得（work情報も含まれる）
     const { results } = await c.env.DB.prepare(
-      `SELECT * FROM episodes_view
-       WHERE work_slug = ? AND slug = ? AND status = 'published'`
+      `SELECT * FROM published_episodes
+       WHERE work_slug = ? AND slug = ?`
     )
       .bind(workSlug, episodeSlug)
       .all();
