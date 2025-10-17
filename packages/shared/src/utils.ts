@@ -6,15 +6,35 @@ import type { CloudflareImageVariant } from './types';
  * Cloudflare ImagesのURLを生成
  * @param imageId Cloudflare Images ID
  * @param variant バリアント名またはカスタムバリアント設定
- * @param domain カスタムドメイン（デフォルト: img.unbelong.xyz）
+ * @param accountHash Cloudflareアカウントハッシュ（カスタムドメイン未設定時に使用）
  */
 export function getImageUrl(
   imageId: string,
   variant: string | CloudflareImageVariant = 'public',
-  domain: string = 'img.unbelong.xyz'
+  accountHash: string = 'wdR9enbrkaPsEgUtgFORrw'
 ): string {
+  // カスタムドメインが設定されている場合は環境変数から取得
+  const customDomain = getEnv('NEXT_PUBLIC_CLOUDFLARE_IMAGES_DOMAIN');
+
+  if (customDomain) {
+    // カスタムドメイン使用
+    if (typeof variant === 'string') {
+      return `https://${customDomain}/${imageId}/${variant}`;
+    }
+    const params = new URLSearchParams();
+    if (variant.width) params.set('width', variant.width.toString());
+    if (variant.height) params.set('height', variant.height.toString());
+    if (variant.fit) params.set('fit', variant.fit);
+    if (variant.quality) params.set('quality', variant.quality.toString());
+    if (variant.format) params.set('format', variant.format);
+    const queryString = params.toString();
+    return `https://${customDomain}/${imageId}/public${queryString ? '?' + queryString : ''}`;
+  }
+
+  // デフォルト: Cloudflare Imagesのデフォルトドメインを使用
+  // https://imagedelivery.net/<ACCOUNT_HASH>/<IMAGE_ID>/<VARIANT>
   if (typeof variant === 'string') {
-    return `https://${domain}/${imageId}/${variant}`;
+    return `https://imagedelivery.net/${accountHash}/${imageId}/${variant}`;
   }
 
   // カスタムバリアントの場合はクエリパラメータで指定
@@ -26,7 +46,7 @@ export function getImageUrl(
   if (variant.format) params.set('format', variant.format);
 
   const queryString = params.toString();
-  return `https://${domain}/${imageId}/public${queryString ? '?' + queryString : ''}`;
+  return `https://imagedelivery.net/${accountHash}/${imageId}/public${queryString ? '?' + queryString : ''}`;
 }
 
 /**
