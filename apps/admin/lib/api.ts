@@ -34,6 +34,8 @@ export const worksApi = {
 export const episodesApi = {
   list: (workId?: string, status?: string) =>
     api.get<ApiResponse<EpisodeWithWork[]>>('/episodes', { params: { work_id: workId, status } }),
+  listByWork: (workId: string, status?: string) =>
+    api.get<ApiResponse<EpisodeWithWork[]>>('/episodes', { params: { work_id: workId, status } }),
   get: (id: string) => api.get<ApiResponse<EpisodeWithWork>>(`/episodes/${id}`),
   create: (data: Partial<Episode>) => api.post<ApiResponse<Episode>>('/episodes', data),
   update: (id: string, data: Partial<Episode>) =>
