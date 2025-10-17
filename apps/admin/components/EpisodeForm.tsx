@@ -43,6 +43,26 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
     }
   };
 
+  // 作品変更時に次のエピソード番号を提案
+  const handleWorkChange = async (workId: string) => {
+    setFormData((prev) => ({ ...prev, work_id: workId }));
+
+    if (workId && !isEdit) {
+      try {
+        const response = await episodesApi.listByWork(workId);
+        if (response.data.success && response.data.data) {
+          const episodes = response.data.data;
+          if (episodes.length > 0) {
+            const maxEpisodeNumber = Math.max(...episodes.map(ep => ep.episode_number));
+            setFormData((prev) => ({ ...prev, episode_number: maxEpisodeNumber + 1 }));
+          }
+        }
+      } catch (error) {
+        console.error('エピソード番号の取得に失敗しました:', error);
+      }
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -83,9 +103,19 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
       router.push('/dashboard/episodes');
     } catch (error: any) {
       console.error('エピソードの保存に失敗しました:', error);
-      const errorMessage = error?.response?.data?.error || error?.message || 'エピソードの保存に失敗しました';
-      const detailMessage = error?.response?.data?.message ? `\n詳細: ${error.response.data.message}` : '';
-      alert(`エピソードの保存に失敗しました\n${errorMessage}${detailMessage}`);
+      let errorMessage = error?.response?.data?.error || error?.message || 'エピソードの保存に失敗しました';
+      const detailMessage = error?.response?.data?.message || '';
+
+      // UNIQUE制約エラーをわかりやすく変換
+      if (detailMessage.includes('UNIQUE constraint failed: episodes.work_id, episodes.episode_number')) {
+        errorMessage = `この作品の第${formData.episode_number}話は既に存在します。\n別のエピソード番号を指定してください。`;
+      } else if (detailMessage.includes('UNIQUE constraint failed: episodes.work_id, episodes.slug')) {
+        errorMessage = `このスラッグ「${formData.slug}」は既にこの作品で使用されています。\n別のスラッグを指定してください。`;
+      } else if (detailMessage) {
+        errorMessage += `\n詳細: ${detailMessage}`;
+      }
+
+      alert(`エピソードの保存に失敗しました\n\n${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -101,7 +131,7 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
         <select
           name="work_id"
           value={formData.work_id}
-          onChange={handleChange}
+          onChange={(e) => handleWorkChange(e.target.value)}
           required
           disabled={isEdit}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100"
@@ -113,6 +143,9 @@ export default function EpisodeForm({ episode, isEdit = false }: EpisodeFormProp
             </option>
           ))}
         </select>
+        <p className="text-sm text-gray-500 mt-1">
+          作品を選択すると、次のエピソード番号が自動的に設定されます
+        </p>
       </div>
 
       {/* 話数 */}
