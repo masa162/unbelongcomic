@@ -239,4 +239,44 @@ works.delete('/:id', async (c) => {
   }
 });
 
+// 作品のエピソードをslugで取得（ネストされたルート）
+works.get('/slug/:workSlug/episodes/:episodeSlug', async (c) => {
+  const workSlug = c.req.param('workSlug');
+  const episodeSlug = c.req.param('episodeSlug');
+
+  try {
+    // episodesビューから取得（work情報も含まれる）
+    const { results } = await c.env.DB.prepare(
+      `SELECT * FROM episodes_view
+       WHERE work_slug = ? AND slug = ? AND status = 'published'`
+    )
+      .bind(workSlug, episodeSlug)
+      .all();
+
+    if (results.length === 0) {
+      return c.json(
+        {
+          success: false,
+          error: 'エピソードが見つかりません',
+        },
+        404
+      );
+    }
+
+    return c.json({
+      success: true,
+      data: results[0],
+    });
+  } catch (error: any) {
+    return c.json(
+      {
+        success: false,
+        error: 'エピソードの取得に失敗しました',
+        message: error.message,
+      },
+      500
+    );
+  }
+});
+
 export default works;
