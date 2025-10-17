@@ -152,9 +152,15 @@ export default function IllustrationsPage() {
               <div className="aspect-square bg-gray-200 relative">
                 {illustration.image_id ? (
                   <img
-                    src={getImageUrl(illustration.image_id, 'thumbnail')}
+                    src={`${getImageUrl(illustration.image_id, 'public')}?width=400`}
                     alt={illustration.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      if (!target.src.includes('fallback')) {
+                        target.src = getImageUrl(illustration.image_id, 'public') + '?fallback=1';
+                      }
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
