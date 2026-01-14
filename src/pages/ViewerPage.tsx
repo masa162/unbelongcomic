@@ -31,15 +31,24 @@ export default function ViewerPage() {
         const epData = res.data.data;
         setEpisode(epData);
         
-        // Parse content (JSON array of image IDs)
+        // Parse content
         if (epData.content) {
+          // 1. Try to parse as JSON array (of image IDs)
           try {
             const parsed = JSON.parse(epData.content);
             if (Array.isArray(parsed)) {
-              setImages(parsed);
+              setImages(parsed.map(id => getImageUrl(id, { width: 1200 })));
             }
           } catch (e) {
-            console.error('Failed to parse episode content:', e);
+            // 2. Not JSON, try to extract image URLs from Markdown format: ![](url)
+            const mdImageRegex = /!\[.*?\]\((.*?)\)/g;
+            const matches = [...epData.content.matchAll(mdImageRegex)];
+            if (matches.length > 0) {
+              setImages(matches.map(m => m[1]));
+            } else {
+              // 3. Fallback: maybe it's just a plain URL or something else
+              console.warn('Content format not recognized as JSON array or Markdown images');
+            }
           }
         }
 
@@ -99,13 +108,13 @@ export default function ViewerPage() {
       </header>
 
       {/* Webtooon Viewer (Vertical Scroll) */}
-      <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
-        {images.map((imgId, index) => (
+      <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', background: '#000' }}>
+        {images.map((url, index) => (
           <img
-            key={`${imgId}-${index}`}
-            src={getImageUrl(imgId, { width: 1200 })}
+            key={`${url}-${index}`}
+            src={url}
             alt={`Page ${index + 1}`}
-            style={{ width: '100%', display: 'block', height: 'auto' }}
+            style={{ width: '100%', display: 'block', height: 'auto', marginBottom: '-1px' }} // -1px to prevent subpixel gaps
             loading="lazy"
           />
         ))}
