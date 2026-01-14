@@ -13,9 +13,9 @@ export default function HomePage() {
 
   const fetchWorks = async () => {
     try {
-      const response = await worksApi.list('manga');
+      const response = await worksApi.list('comic');
       if (response.data.success && response.data.data) {
-        setWorks(response.data.data.filter(w => w.type === 'manga'));
+        setWorks(response.data.data.filter(w => w.type === 'comic' && w.status === 'published'));
       }
     } catch (error) {
       console.error('Failed to fetch works:', error);
@@ -62,7 +62,7 @@ export default function HomePage() {
               >
                 <div style={{ aspectRatio: '3/4', position: 'relative', overflow: 'hidden' }}>
                   <img
-                    src={getImageUrl(work.cover_image_id || '', { width: 600, fit: 'cover' })}
+                    src={getImageUrl(work.thumbnail_image_id || '', { width: 600, fit: 'cover' })}
                     alt={work.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
@@ -84,7 +84,7 @@ export default function HomePage() {
                       marginTop: '0.5rem',
                       display: 'inline-block'
                     }}>
-                      {work.status === 'ongoing' ? '連載中' : '完結'}
+                      {work.status === 'published' ? '公開中' : '準備中'}
                     </span>
                   </div>
                 </div>

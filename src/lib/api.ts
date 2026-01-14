@@ -20,9 +20,10 @@ export interface Work {
   title: string;
   slug: string;
   description: string | null;
-  type: 'manga' | 'illustration';
-  status: 'ongoing' | 'completed' | 'hiatus';
-  cover_image_id: string | null;
+  type: 'comic' | 'illustration';
+  status: 'draft' | 'published' | 'archived';
+  thumbnail_image_id: string | null;
+  og_image_id: string | null;
   created_at: number;
   updated_at: number;
 }
@@ -33,9 +34,10 @@ export interface Episode {
   title: string;
   episode_number: number;
   slug: string;
-  content: string | null; // JSON string of image IDs
+  content: string; // Markdown
   thumbnail_image_id: string | null;
-  status: 'draft' | 'published';
+  og_image_id: string | null;
+  status: 'draft' | 'published' | 'archived';
   published_at: number | null;
   created_at: number;
   updated_at: number;
@@ -43,7 +45,7 @@ export interface Episode {
 
 // Works API
 export const worksApi = {
-  list: (type?: 'manga' | 'illustration') => 
+  list: (type?: 'comic' | 'illustration') => 
     client.get<ApiResponse<Work[]>>('/api/works', { params: { type } }),
   get: (idOrSlug: string) => 
     client.get<ApiResponse<Work>>(`/api/works/${idOrSlug}`),

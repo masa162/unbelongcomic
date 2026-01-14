@@ -48,7 +48,7 @@ export default function WorkPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '3rem', marginBottom: '4rem' }}>
         <div style={{ borderRadius: '16px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}>
           <img
-            src={getImageUrl(work.cover_image_id || '', { width: 600 })}
+            src={getImageUrl(work.thumbnail_image_id || '', { width: 600 })}
             alt={work.title}
             style={{ width: '100%', display: 'block' }}
           />
@@ -57,7 +57,7 @@ export default function WorkPage() {
           <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: 800 }}>{work.title}</h1>
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
              <span style={{ padding: '0.25rem 0.75rem', background: '#3b82f6', color: 'white', borderRadius: '99px', fontSize: '0.875rem' }}>
-               {work.status === 'ongoing' ? '連載中' : '完結'}
+               {work.status === 'published' ? '公開中' : '準備中'}
              </span>
           </div>
           <p style={{ lineHeight: 1.7, color: '#94a3b8', fontSize: '1.1rem' }}>
