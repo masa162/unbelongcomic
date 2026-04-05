@@ -2,7 +2,7 @@ export function getImageUrl(imageId: string, options: { width?: number; height?:
   if (!imageId) return '';
   
   // Custom CDN URL
-  const baseUrl = 'https://img.unbelong.xyz';
+  const baseUrl = 'https://img.tokyo86.com';
   
   const params = new URLSearchParams();
   if (options.width) params.append('w', options.width.toString());
